@@ -1,0 +1,20 @@
+body {
+  background-color: #1a1a1a;
+  color: #00ff00;
+  font-family: monospace;
+  padding: 2rem;
+}
+input, button {
+  background-color: black;
+  color: #00ff00;
+  border: 1px solid #00ff00;
+  padding: 0.25rem;
+}
+.priority {
+  border-left: 4px solid #00ff00;
+  padding-left: 0.5rem;
+}
+.faded {
+  color: #005500;
+  text-decoration: line-through;
+}

@@ -1,3 +1,5 @@
+// Финальная правка от 15 мая
+
 import { useState, useEffect } from "react";
 
 function loadFromStorage(key, fallback) {

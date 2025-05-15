@@ -115,19 +115,35 @@ export default function App() {
             style={{ backgroundColor: quest.priority ? "#276727" : "transparent", padding: "10px", marginBottom: "16px" }}
           >
             <div className="flex justify-between items-center mb-1">
-              <span
-                onClick={() => handleClick(quest)}
-                style={{ fontSize: "20px", fontWeight: "bold", flexGrow: 1, marginRight: "12px", cursor: "pointer" }}
-              >
-                {quest.title}
-              </span>
+              {quest.editing ? (
+  <input
+    type="text"
+    value={quest.editText || ""}
+    onChange={(e) => updateQuest(quest.id, { editText: e.target.value })}
+    onBlur={() => updateQuest(quest.id, { title: quest.editText, editing: false, editText: "" })}
+    onKeyDown={(e) => {
+      if (e.key === "Enter") {
+        updateQuest(quest.id, { title: quest.editText, editing: false, editText: "" });
+      }
+    }}
+    autoFocus
+    style={{ fontSize: "20px", fontWeight: "bold", flexGrow: 1, marginRight: "12px" }}
+  />
+) : (
+  <span
+    onClick={() => handleClick(quest)}
+    style={{ fontSize: "20px", fontWeight: "bold", flexGrow: 1, marginRight: "12px", cursor: "pointer" }}
+  >
+    {quest.title}
+  </span>
+)
               <button onClick={() => updateQuest(quest.id, { priority: !quest.priority })} style={{ marginLeft: "12px" }}>★</button>
             </div>
 
             {quest.expanded && (
               <div className="ml-4 text-sm">
                 <div style={{ marginBottom: "8px" }}>
-                    <button onClick={() => console.log("EDIT clicked for", quest.id)}>EDIT</button>
+                    <button onClick={() => updateQuest(quest.id, { editing: true, editText: quest.title })}>EDIT</button>
                     <button onClick={() => deleteQuest(quest.id)}>DEL</button>
                   </div>
 
@@ -155,7 +171,7 @@ export default function App() {
                   </li>
                 </ul>
                 <div className="flex gap-1 mt-2">
-                  <button onClick={() => console.log("EDIT clicked for", quest.id)}>EDIT</button>
+                  <button onClick={() => updateQuest(quest.id, { editing: true, editText: quest.title })}>EDIT</button>
                   <button onClick={() => deleteQuest(quest.id)}>DEL</button>
                 </div>
               </div>

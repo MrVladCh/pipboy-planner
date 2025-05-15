@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import './App.css';
 
 function loadFromStorage(key, fallback) {
   try {
@@ -12,17 +13,6 @@ function loadFromStorage(key, fallback) {
 function saveToStorage(key, data) {
   localStorage.setItem(key, JSON.stringify(data));
 }
-
-
-<style>
-  .faded {
-    text-decoration: line-through;
-    text-decoration-thickness: 2px;
-    text-decoration-skip-ink: none;
-    line-height: 1.5;
-    text-decoration-position: under;
-  }
-</style>
 
 
 export default function App() {

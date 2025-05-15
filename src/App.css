@@ -1,0 +1,7 @@
+
+.faded {
+  text-decoration: line-through;
+  text-decoration-thickness: 2px;
+  text-decoration-skip-ink: none;
+  line-height: 1.5;
+}

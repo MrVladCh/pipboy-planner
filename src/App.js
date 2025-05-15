@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 
 function loadFromStorage(key, fallback) {
@@ -33,6 +34,7 @@ export default function App() {
         subtasks: [],
         editing: false,
         priority: false,
+        editText: "",
         id: Date.now(),
       },
     ]);
@@ -99,66 +101,75 @@ export default function App() {
         {sortedQuests.map((quest) => (
           <li
             key={quest.id}
-            className={`mb-4 p-2 ${quest.priority ? "bg-green-900" : ""} ${quest.completed ? "faded" : ""}`}
+            className={quest.completed ? "faded" : ""}
+            style={{
+              backgroundColor: quest.priority ? "#276727" : "transparent",
+              padding: "10px",
+              marginBottom: "16px"
+            }}
           >
-            <div className="flex justify-between items-center mb-1">
-              
-<div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-  {quest.editing ? (
-    <input
-      type="text"
-      value={quest.editText || ""}
-      onChange={(e) => updateQuest(quest.id, { editText: e.target.value })}
-      onBlur={() =>
-        updateQuest(quest.id, {
-          title: quest.editText,
-          editing: false,
-          editText: "",
-        })
-      }
-      onKeyDown={(e) => {
-        if (e.key === "Enter") {
-          updateQuest(quest.id, {
-            title: quest.editText,
-            editing: false,
-            editText: "",
-          });
-        }
-      }}
-      autoFocus
-      style={{
-        fontSize: "20px",
-        fontWeight: "bold",
-        flexGrow: 1,
-        marginRight: "12px",
-      }}
-    />
-  ) : (
-    <span
-      onClick={() => handleClick(quest)}
-      style={{
-        fontSize: "20px",
-        fontWeight: "bold",
-        flexGrow: 1,
-        marginRight: "12px",
-        cursor: "pointer",
-      }}
-    >
-      {quest.title}
-    </span>
-  )}
-  <button
-    onClick={() => updateQuest(quest.id, { priority: !quest.priority })}
-    style={{ marginLeft: "12px" }}
-  >
-    ★
-  </button>
-</div>
-
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+              {quest.editing ? (
+                <input
+                  type="text"
+                  value={quest.editText || ""}
+                  onChange={(e) => updateQuest(quest.id, { editText: e.target.value })}
+                  onBlur={() =>
+                    updateQuest(quest.id, {
+                      title: quest.editText,
+                      editing: false,
+                      editText: "",
+                    })
+                  }
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      updateQuest(quest.id, {
+                        title: quest.editText,
+                        editing: false,
+                        editText: "",
+                      });
+                    }
+                  }}
+                  autoFocus
+                  style={{
+                    fontSize: "20px",
+                    fontWeight: "bold",
+                    flexGrow: 1,
+                    marginRight: "12px",
+                  }}
+                />
+              ) : (
+                <span
+                  onClick={() => handleClick(quest)}
+                  style={{
+                    fontSize: "20px",
+                    fontWeight: "bold",
+                    flexGrow: 1,
+                    marginRight: "12px",
+                    cursor: "pointer",
+                  }}
+                >
+                  {quest.title}
+                </span>
+              )}
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  updateQuest(quest.id, { priority: !quest.priority });
+                }}
+                style={{ marginLeft: "8px", fontSize: "20px", background: "none", border: "none", cursor: "pointer" }}
+              >
+                ★
+              </button>
             </div>
 
             {quest.expanded && (
               <div className="ml-4 text-sm">
+                <div style={{ marginBottom: "8px" }}>
+                  <button onClick={() => updateQuest(quest.id, { editing: !quest.editing })}>EDIT</button>
+                  <button onClick={() => deleteQuest(quest.id)}>DEL</button>
+                </div>
+
                 <ul>
                   {quest.subtasks.map((s, i) => (
                     <li
@@ -182,10 +193,6 @@ export default function App() {
                     />
                   </li>
                 </ul>
-                <div className="flex gap-1 mt-2">
-                  <button onClick={() => updateQuest(quest.id, { editing: !quest.editing })}>EDIT</button>
-                  <button onClick={() => deleteQuest(quest.id)}>DEL</button>
-                </div>
               </div>
             )}
           </li>

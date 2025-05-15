@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import './App.css';
 
 function loadFromStorage(key, fallback) {
   try {

@@ -1,5 +1,3 @@
-// Финальная правка от 15 мая
-
 import { useState, useEffect } from "react";
 
 function loadFromStorage(key, fallback) {
@@ -14,7 +12,6 @@ function loadFromStorage(key, fallback) {
 function saveToStorage(key, data) {
   localStorage.setItem(key, JSON.stringify(data));
 }
-
 
 export default function App() {
   const [quests, setQuests] = useState(() => loadFromStorage("quests", []));
@@ -95,51 +92,75 @@ export default function App() {
           onChange={(e) => setNewQuest(e.target.value)}
           placeholder="Add new quest..."
         />
-        <button onClick={addQuest} style={{ marginLeft: "12px" }}>ADD</button>
+        <button onClick={addQuest} className="ml-2">ADD</button>
       </div>
       <hr />
       <ul>
         {sortedQuests.map((quest) => (
           <li
             key={quest.id}
-            className={quest.completed ? "faded" : ""}
-            style={{ backgroundColor: quest.priority ? "#276727" : "transparent", padding: "10px", marginBottom: "16px" }}
+            className={`mb-4 p-2 ${quest.priority ? "bg-green-900" : ""} ${quest.completed ? "faded" : ""}`}
           >
             <div className="flex justify-between items-center mb-1">
-              {quest.editing ? (
-  <input
-    type="text"
-    value={quest.editText || ""}
-    onChange={(e) => updateQuest(quest.id, { editText: e.target.value })}
-    onBlur={() => updateQuest(quest.id, { title: quest.editText, editing: false, editText: "" })}
-    onKeyDown={(e) => {
-      if (e.key === "Enter") {
-        updateQuest(quest.id, { title: quest.editText, editing: false, editText: "" });
+              
+<div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+  {quest.editing ? (
+    <input
+      type="text"
+      value={quest.editText || ""}
+      onChange={(e) => updateQuest(quest.id, { editText: e.target.value })}
+      onBlur={() =>
+        updateQuest(quest.id, {
+          title: quest.editText,
+          editing: false,
+          editText: "",
+        })
       }
-    }}
-    autoFocus
-    style={{ fontSize: "20px", fontWeight: "bold", flexGrow: 1, marginRight: "12px" }}
-  />
-) : (
-  <span
-    onClick={() => handleClick(quest)}
-    style={{ fontSize: "20px", fontWeight: "bold", flexGrow: 1, marginRight: "12px", cursor: "pointer" }}
+      onKeyDown={(e) => {
+        if (e.key === "Enter") {
+          updateQuest(quest.id, {
+            title: quest.editText,
+            editing: false,
+            editText: "",
+          });
+        }
+      }}
+      autoFocus
+      style={{
+        fontSize: "20px",
+        fontWeight: "bold",
+        flexGrow: 1,
+        marginRight: "12px",
+      }}
+    />
+  ) : (
+    <span
+      onClick={() => handleClick(quest)}
+      style={{
+        fontSize: "20px",
+        fontWeight: "bold",
+        flexGrow: 1,
+        marginRight: "12px",
+        cursor: "pointer",
+      }}
+    >
+      {quest.title}
+    </span>
+  )}
+  <button
+    onClick={() => updateQuest(quest.id, { priority: !quest.priority })}
+    style={{ marginLeft: "12px" }}
   >
-    {quest.title}
-  </span>
-)
-              <button onClick={() => updateQuest(quest.id, { priority: !quest.priority })} style={{ marginLeft: "12px" }}>★</button>
+    ★
+  </button>
+</div>
+
             </div>
 
             {quest.expanded && (
               <div className="ml-4 text-sm">
-                <div style={{ marginBottom: "8px" }}>
-                    <button onClick={() => updateQuest(quest.id, { editing: true, editText: quest.title })}>EDIT</button>
-                    <button onClick={() => deleteQuest(quest.id)}>DEL</button>
-                  </div>
-
-                  <ul>
-                    {quest.subtasks.map((s, i) => (
+                <ul>
+                  {quest.subtasks.map((s, i) => (
                     <li
                       key={i}
                       onClick={() => toggleSubtask(quest.id, i)}
@@ -162,7 +183,7 @@ export default function App() {
                   </li>
                 </ul>
                 <div className="flex gap-1 mt-2">
-                  <button onClick={() => updateQuest(quest.id, { editing: true, editText: quest.title })}>EDIT</button>
+                  <button onClick={() => updateQuest(quest.id, { editing: !quest.editing })}>EDIT</button>
                   <button onClick={() => deleteQuest(quest.id)}>DEL</button>
                 </div>
               </div>

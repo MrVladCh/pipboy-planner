@@ -170,8 +170,8 @@ export default function App() {
                   fontSize: "18px",
                   border: "1px solid #ccc",
                   borderRadius: "4px",
-                  backgroundColor: quest.priority ? "#facc15" : "transparent",
-                  color: quest.priority ? "black" : "#999",
+                  backgroundColor: quest.priority ? "#276727" : "transparent",
+                  color: quest.priority ? "#cfc" : "#666",
                   cursor: "pointer",
                   display: "flex",
                   alignItems: "center",
@@ -206,12 +206,13 @@ export default function App() {
                         type="text"
                         placeholder="Add subtask"
                         onKeyDown={(e) => {
-                          if (e.key === "Enter" && e.target.value.trim()) {
-                            addSubtask(quest.id, e.target.value.trim());
-                            updateQuest(quest.id, { showSubtaskInput: false });
-                            e.target.value = "";
-                          }
-                        }}
+        if (e.key === "Enter" && e.target.value.trim()) {
+          const text = e.target.value.trim();
+          e.target.value = "";
+          updateQuest(quest.id, { showSubtaskInput: false });
+          addSubtask(quest.id, text);
+        }
+      }}
                       />
                     </li>
                   )}

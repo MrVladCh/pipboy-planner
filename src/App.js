@@ -34,6 +34,7 @@ export default function App() {
         subtasks: [],
         editing: false,
         priority: false,
+        showSubtaskInput: false,
         editText: "",
         id: Date.now(),
       },
@@ -93,6 +94,11 @@ export default function App() {
           value={newQuest}
           onChange={(e) => setNewQuest(e.target.value)}
           placeholder="Add new quest..."
+  onKeyDown={(e) => {
+    if (e.key === "Enter" && newQuest.trim()) {
+      addQuest();
+    }
+  }}
         />
         <button onClick={addQuest} className="ml-2">ADD</button>
       </div>
@@ -157,9 +163,22 @@ export default function App() {
                   e.stopPropagation();
                   updateQuest(quest.id, { priority: !quest.priority });
                 }}
-                style={{ marginLeft: "8px", fontSize: "20px", background: "none", border: "none", cursor: "pointer" }}
+                style={{
+                  marginLeft: "2px",
+                  width: "28px",
+                  height: "28px",
+                  fontSize: "18px",
+                  border: "1px solid #ccc",
+                  borderRadius: "4px",
+                  backgroundColor: quest.priority ? "#facc15" : "transparent",
+                  color: quest.priority ? "black" : "#999",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center"
+                }}
               >
-                ★
+                {quest.priority ? "★" : "☆"}
               </button>
             </div>
 
@@ -168,6 +187,7 @@ export default function App() {
                 <div style={{ marginBottom: "8px" }}>
                   <button onClick={() => updateQuest(quest.id, { editing: !quest.editing })}>EDIT</button>
                   <button onClick={() => deleteQuest(quest.id)}>DEL</button>
+                  <button onClick={() => updateQuest(quest.id, { showSubtaskInput: true })}>+</button>
                 </div>
 
                 <ul>
@@ -180,18 +200,21 @@ export default function App() {
                       - {s.text}
                     </li>
                   ))}
-                  <li>
-                    <input
-                      type="text"
-                      placeholder="Add subtask"
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter" && e.target.value.trim()) {
-                          addSubtask(quest.id, e.target.value.trim());
-                          e.target.value = "";
-                        }
-                      }}
-                    />
-                  </li>
+                  {quest.showSubtaskInput && (
+                    <li>
+                      <input
+                        type="text"
+                        placeholder="Add subtask"
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" && e.target.value.trim()) {
+                            addSubtask(quest.id, e.target.value.trim());
+                            updateQuest(quest.id, { showSubtaskInput: false });
+                            e.target.value = "";
+                          }
+                        }}
+                      />
+                    </li>
+                  )}
                 </ul>
               </div>
             )}

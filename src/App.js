@@ -13,6 +13,18 @@ function saveToStorage(key, data) {
   localStorage.setItem(key, JSON.stringify(data));
 }
 
+
+<style>
+  .faded {
+    text-decoration: line-through;
+    text-decoration-thickness: 2px;
+    text-decoration-skip-ink: none;
+    line-height: 1.5;
+    text-decoration-position: under;
+  }
+</style>
+
+
 export default function App() {
   const [quests, setQuests] = useState(() => loadFromStorage("quests", []));
   const [newQuest, setNewQuest] = useState("");
@@ -115,7 +127,7 @@ export default function App() {
             {quest.expanded && (
               <div className="ml-4 text-sm">
                 <div style={{ marginBottom: "8px" }}>
-                    <button onClick={() => updateQuest(quest.id, { editing: !quest.editing })}>EDIT</button>
+                    <button onClick={() => console.log("EDIT clicked for", quest.id)}>EDIT</button>
                     <button onClick={() => deleteQuest(quest.id)}>DEL</button>
                   </div>
 
@@ -143,7 +155,7 @@ export default function App() {
                   </li>
                 </ul>
                 <div className="flex gap-1 mt-2">
-                  <button onClick={() => updateQuest(quest.id, { editing: !quest.editing })}>EDIT</button>
+                  <button onClick={() => console.log("EDIT clicked for", quest.id)}>EDIT</button>
                   <button onClick={() => deleteQuest(quest.id)}>DEL</button>
                 </div>
               </div>

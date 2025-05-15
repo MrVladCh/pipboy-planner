@@ -92,29 +92,35 @@ export default function App() {
           onChange={(e) => setNewQuest(e.target.value)}
           placeholder="Add new quest..."
         />
-        <button onClick={addQuest} className="ml-2">ADD</button>
+        <button onClick={addQuest} style={{ marginLeft: "12px" }}>ADD</button>
       </div>
       <hr />
       <ul>
         {sortedQuests.map((quest) => (
           <li
             key={quest.id}
-            className={`mb-4 p-2 ${quest.priority ? "bg-green-900" : ""} ${quest.completed ? "faded" : ""}`}
+            className={quest.completed ? "faded" : ""}
+            style={{ backgroundColor: quest.priority ? "#276727" : "transparent", padding: "10px", marginBottom: "16px" }}
           >
             <div className="flex justify-between items-center mb-1">
               <span
                 onClick={() => handleClick(quest)}
-                className="cursor-pointer text-xl flex-grow"
+                style={{ fontSize: "20px", fontWeight: "bold", flexGrow: 1, marginRight: "12px", cursor: "pointer" }}
               >
                 {quest.title}
               </span>
-              <button onClick={() => updateQuest(quest.id, { priority: !quest.priority })} className="ml-2">★</button>
+              <button onClick={() => updateQuest(quest.id, { priority: !quest.priority })} style={{ marginLeft: "12px" }}>★</button>
             </div>
 
             {quest.expanded && (
               <div className="ml-4 text-sm">
-                <ul>
-                  {quest.subtasks.map((s, i) => (
+                <div style={{ marginBottom: "8px" }}>
+                    <button onClick={() => updateQuest(quest.id, { editing: !quest.editing })}>EDIT</button>
+                    <button onClick={() => deleteQuest(quest.id)}>DEL</button>
+                  </div>
+
+                  <ul>
+                    {quest.subtasks.map((s, i) => (
                     <li
                       key={i}
                       onClick={() => toggleSubtask(quest.id, i)}
